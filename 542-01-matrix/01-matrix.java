@@ -1,5 +1,5 @@
 class Solution {
-    private record Cell<E, I >(E row, I col) {};
+    private record Cell(int row, int col) {};
 
     public int[][] updateMatrix(int[][] mat) {
         if(mat == null || mat.length ==0) return mat;
@@ -7,12 +7,12 @@ class Solution {
         int m = mat.length;
         int n = mat[0].length;
 
-        Queue<Cell<Integer, Integer>> q = new ArrayDeque<>();
+        Queue<Cell> q = new ArrayDeque<>();
 
         for(int i=0; i<m; i++) {
             for(int j=0; j<n; j++) {
                 if(mat[i][j] == 0) {
-                    q.offer(new Cell<>(i,j));
+                    q.offer(new Cell(i,j));
                 } else if (mat[i][j] == 1) {
                     mat[i][j] = Integer.MAX_VALUE;
                 }
@@ -25,7 +25,7 @@ class Solution {
         boolean [][] visited = new boolean[m][n];
         while(!q.isEmpty()) {
             for(int s= q.size(); s>0; s--) {
-                Cell<Integer, Integer> cell = q.poll();
+                Cell cell = q.poll();
                 int row = cell.row;
                 int col = cell.col;
 
@@ -40,7 +40,7 @@ class Solution {
                     if(mat[newx][newy] != 0) {
                         mat[newx][newy] = dist;
                         visited[newx][newy] = true;
-                        q.offer(new Cell<>(newx, newy));
+                        q.offer(new Cell(newx, newy));
                     }
                 }
 
