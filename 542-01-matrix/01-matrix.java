@@ -28,7 +28,6 @@ class Solution {
                 Cell<Integer, Integer> cell = q.poll();
                 int row = cell.row;
                 int col = cell.col;
-                visited[row][col] = true;
 
                 for(int k = 0; k<4; k++) {
                     int newx = row + dirx[k];
@@ -39,7 +38,8 @@ class Solution {
                     }
 
                     if(mat[newx][newy] != 0) {
-                        mat[newx][newy] = Math.min(mat[newx][newy], dist);
+                        mat[newx][newy] = dist;
+                        visited[newx][newy] = true;
                         q.offer(new Cell<>(newx, newy));
                     }
                 }
