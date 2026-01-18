@@ -1,22 +1,26 @@
 class Solution {
-
     class UnionFind {
         int size;
         int[] parents;
+        int[] ranks;
 
         public UnionFind(int n) {
             size = n;
             parents = new int[n];
+            ranks = new int[n];
             for(int i =0; i<n; i++) {
                 parents[i] = i;
+                ranks[i] = 0;
             }
         }
 
         public int find(int a) {
-            while(parents[a] !=a) {
-                a = parents[a];
+            if (parents[a] == a) {
+                return a;
             }
-            return a;
+            // Path Compression: recursively find the root and
+            // make it the direct parent of current node 'a'
+            return parents[a] = find(parents[a]);
         }
 
         public boolean union(int a, int b) {
@@ -26,7 +30,14 @@ class Solution {
             if(pa == pb) {
                 return true;
             }
-            parents[pb] = pa;
+            if(ranks[a] < ranks[b]) {
+                parents[pa] = pb;
+            } else if(ranks[b] < ranks[a]){
+                parents[pb] = pa;
+            } else  {
+                ranks[a]++;
+                parents[pb] = pa;
+            }
             return false;
         }
     }
