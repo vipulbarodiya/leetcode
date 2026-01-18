@@ -1,48 +1,62 @@
-
-
 class Solution {
 
-    private record Cell(int r, int c){};
-
+    public record Cell(int r, int c, int g, int f) implements Comparable<Cell>{
+        @Override
+        public int compareTo(Cell other) {
+            return Integer.compare(this.f, other.f);
+        }
+    };
     public int shortestPathBinaryMatrix(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-
-        boolean[][] visited = new boolean[m][n];
-        Queue<Cell> q = new ArrayDeque<>();
-        if(grid[0][0] == 0) {
-            q.offer(new Cell(0,0));
-            visited[0][0] = true;
-        } else {
-            return -1;
+        int n = grid.length;
+        if(n==0) return -1;
+        if(n==1) {
+            if(grid[0][0] == 0) return 1;
+            else if(grid[0][0] == 1) return -1;
         }
 
-        int[][] dirs = { {-1,-1}, {0, -1}, {1,-1}, {-1, 0}, {1,0},{-1,1},{0,1},{1, 1} };
-        int dist = 1;
-        int ans = 0;
-        while(!q.isEmpty()) {
-            for(int s = q.size(); s>0; s--) {
-                Cell cell = q.poll();
-                int row = cell.r;
-                int col = cell.c;
+        if(grid[0][0] == 1) return -1;
+        int[][] bestG = new int[n][n];
+        for(int [] row: bestG) {
+            Arrays.fill(row,Integer.MAX_VALUE);
+        }
 
-                for(int i=0; i< dirs.length; i++) {
-                    int x = row+dirs[i][0];
-                    int y = col+dirs[i][1];
+        PriorityQueue<Cell> pq = new PriorityQueue<>();
+        bestG[0][0] = 1;
+        int startH = n-1; //. 0,0 -> n-1,n-1 // max delta x, delta y returns n-1.
+        pq.offer(new Cell (0,0,1,1+startH));
 
-                    if(x<0 || y<0 || x>=grid.length || y>=grid[0].length || visited[x][y] || grid[x][y] == 1) {
-                        continue;
-                    }
 
-                    if((x == (grid.length-1)) && (y == (grid[0].length -1))) {
-                        ans = dist;
-                    }
-                    visited[x][y] = true;
-                    q.offer(new Cell(x,y));
+        int[][] dirs = {
+                {-1,-1},  {-1,0}, {-1,1},
+                {0, -1},          {0,1},
+                {1, -1},  {1,0},  {1,1}
+        };
+        while(!pq.isEmpty()) {
+            Cell curr = pq.poll();
+
+            if(curr.g > bestG[curr.r][curr.c]) continue;
+            if(curr.r == (n - 1) && curr.c == (n - 1)) return curr.g;
+
+
+
+            for(int i=0; i<dirs.length; i++) {
+                int x = curr.r+dirs[i][0];
+                int y = curr.c+dirs[i][1];
+
+                if(x<0 || y<0 || x>=n || y>=n || grid[x][y]==1) {
+                    continue;
                 }
+
+                int nextG = curr.g+1;
+                if(bestG[x][y] > nextG) {
+                    bestG[x][y] = nextG;
+                    int h = Math.max((n-1-x), (n-1-y));
+                    pq.offer(new Cell(x,y,bestG[x][y], bestG[x][y]+h));
+                }
+
             }
-            dist++;
         }
-        return visited[m-1][n-1]==false?-1:(ans+1);
+        return -1;
+
     }
 }
