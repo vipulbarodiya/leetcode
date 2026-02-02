@@ -1,42 +1,39 @@
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         if(beginWord.length()!=endWord.length()) return 0;
-        int l = beginWord.length();
-        List<List<String>> g = new ArrayList<>();
-        Map<String,Integer> dictionary = new HashMap<>(wordList.stream().collect(Collectors.toMap(Function.identity(),s->1)));
+        Set<String> dict = new HashSet<>(wordList);
         Queue<String> q = new ArrayDeque<>();
         Set<String> visited = new HashSet<>();
+
         q.offer(beginWord);
         visited.add(beginWord);
+
         int dist = 1;
-        StringBuilder curr = new StringBuilder();
-        String currWord = null;
+
+        String s = null;
+        StringBuilder sb = new StringBuilder();
         while(!q.isEmpty()) {
-            for(int s = q.size(); s>0; s--) {
-                currWord = q.poll();
-                curr.append(currWord);
-                for(int i=0; i<currWord.length(); i++) {
-                    for(int j = 0; j<26; j++) {
-                        curr.setCharAt(i, (char)('a'+j));
-                        String newWord = curr.toString();
-                        if(newWord.equals(endWord) && dictionary.containsKey(newWord)) {
+            for(int sz = q.size(); sz>0; sz--){
+                s = q.poll();
+                sb.append(s);
+                for(int i=0; i<s.length(); i++) {
+                    for(int j=0; j<26; j++) {
+                        sb.setCharAt(i, (char) ('a' + j));
+                        String currWord = sb.toString();
+                        if (currWord.equals(endWord) && dict.contains(currWord)) {
                             return dist+1;
                         }
-                        if( dictionary.containsKey(newWord) && !visited.contains(newWord) ) {
-                            // add node;
-                            q.offer(newWord);
-                            visited.add(newWord);
+                        if (dict.contains(currWord) && !visited.contains(currWord)) {
+                            visited.add(currWord);
+                            q.add(currWord);
                         }
-
                     }
-                    curr.setCharAt(i, currWord.charAt(i));
+                    sb.setCharAt(i, s.charAt(i));
                 }
-                curr.setLength(0);
+                sb.setLength(0);
             }
-                dist++;
-
+            dist++;
         }
-
         return 0;
     }
 }
