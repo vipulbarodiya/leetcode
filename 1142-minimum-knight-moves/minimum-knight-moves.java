@@ -23,7 +23,7 @@ class Solution {
                     int newx = c.x + dirs.get(j).get(0);
                     int newy = c.y + dirs.get(j).get(1);
 
-                    if(newx < -2 || newy< -2) continue;
+                    if(newx < -2 || newy< -2 || newx > (x + 2 )|| newy >(y+2)) continue;
 
                     Cell newCell = new Cell(newx, newy);
 
