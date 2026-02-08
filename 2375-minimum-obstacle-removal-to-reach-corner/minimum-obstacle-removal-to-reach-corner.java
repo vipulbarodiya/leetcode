@@ -9,10 +9,10 @@ class Solution {
             {0,-1}
     };
 
-    public static boolean isValid(int r, int c, int[][] grid, boolean[][] visited) {
+    public static boolean isValid(int r, int c, int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        if(r<0 || c<0 || r==m || c==n || visited[r][c]){
+        if(r<0 || c<0 || r==m || c==n ){
             return false;
         }
         return true;
@@ -45,12 +45,12 @@ class Solution {
             if(row == m-1 && col == n-1){
                 return distance[row][col];
             }
-            visited[row][col] = true;
+            if(cost > distance[row][col]) continue;
             for(int i=0; i<4; i++) {
                 int nextR = row + dirs[i][0];
                 int nextC = col + dirs[i][1];
 
-                if(isValid(nextR, nextC, grid, visited)) {
+                if(isValid(nextR, nextC, grid)) {
                     int nextCost = cost + ((grid[nextR][nextC] == 1)?1:0);
                     if(nextCost < distance[nextR][nextC]) {
                         distance[nextR][nextC] = nextCost;
