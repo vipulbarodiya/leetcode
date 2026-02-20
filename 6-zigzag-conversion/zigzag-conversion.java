@@ -4,14 +4,14 @@ class Solution {
         if(numRows == 1) {
             return s;
         }
-        List<List<Character>> rows= new ArrayList<>();
+        StringBuilder[] rows= new StringBuilder[numRows];
         for(int i=0; i<numRows; i++) {
-            rows.add(new ArrayList<>());
+            rows[i] = new StringBuilder();
         }
         boolean d = true;
         int row = 0;
         for(int i=0; i<n; i++) {
-            rows.get(row).add(s.charAt(i));
+            (rows[row]).append(s.charAt(i));
             row = row + ((d)?1:-1);
             if(row == numRows-1) {
                 d = false;
@@ -21,10 +21,8 @@ class Solution {
 
         }
         StringBuilder sb = new StringBuilder();
-        for(List<Character> x: rows) {
-            for(char c: x) {
-                sb.append(c);
-            }
+        for(StringBuilder x: rows) {
+            sb.append(x.toString());
         }
         return sb.toString();
 
