@@ -39,7 +39,6 @@ class Solution {
         boolean[][] vis = new boolean[m][n];
         for(int i=0; i<m; i++) {
             for(int j = 0; j<n; j++) {
-                boolean[][] path = new boolean[m][n];
 
                 if(isValid(i,j,grid,vis)) {
                     dfs(i,j, grid, vis);
